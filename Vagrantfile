@@ -24,9 +24,6 @@ Vagrant.configure("2") do |config|
     config.vm.define opts[:name] do |config|
       config.vm.hostname = opts[:name]
       config.vm.network :private_network, ip: opts[:ip]
-
-      if opts[:name] == "mongo1"
-
         config.vm.provision "ansible" do |ansible|
           ansible.playbook = "mongo.yaml"
           ansible.limit = "all"
