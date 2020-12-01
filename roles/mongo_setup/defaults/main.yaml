@@ -1,0 +1,50 @@
+---
+
+mongo_package: mongodb-org
+mongo_package_installed: present
+mongo_version: "4.4"
+
+
+mongo_user: " {{ 'mongod' if ('RedHat' == ansible_os_family) else 'mongo-user' }} "
+mongo_service_name: " {{ 'mongod' if ('mongodb-org' in mongo_package else 'mongodb' }} "
+mongo_service_manage: true
+mongo_uid: 3500
+mongo_gid: 3500
+mongo_update_password: "on_create"
+
+mongo_systemlog_verbose: "0"
+mongo_systemlog_dest: "file"
+mongo_systemlog_logappend: true
+mongo_systemlog_rotate: "reopen"
+mongo_systemlog_path: "/media/data/mongodb/logs/mongo.log"
+
+mongo_base_dir: "/media/data/mongodb/base"
+mongo_base_journal: true
+
+mongo_admin: admin
+mongo_admin_passwd: rofl
+mongo_root: root
+mongo_root_passwd: rofl0
+mongo_backup: backs
+mongo_backup_passwd: roflo01
+
+mongo_process_fork: true
+
+mongo_net_bind: 127.0.0.1
+mongo_net_port: 27017
+
+mongo_setparameter_bypass: false
+mongo_net_maxconn: 65535
+
+mongo_authorization: "enabled"
+
+mongo_rs_name: "rs01"
+
+mongo_key: "/etc/mongo/pem.key"
+
+
+#### NEED TO SETUP GROUP AND MASTER NODE IN YAML WHEN PLAY THE BOOK
+#### set the group for project via mongo_project and set the master node with 'master' label and set the priority and arbiteronly in hostvars
+#### set the mongo_master as the host to which you will be connecting to create a user
+#### set the mongo_user in play for pass the values for user
+#### set the mongo_oplog for use oplog user

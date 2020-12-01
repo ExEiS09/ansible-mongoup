@@ -1,0 +1,15 @@
+---
+- hosts: mongo
+  gather_facts: yes
+  become: yes
+  vars:
+    mongo_master: mongo1
+    mongo_project: mongo
+    mongodb_oplog_users:
+      - {
+        user: oplog,
+        password: passw0rd
+      }
+  roles:
+    - mongo_setup
+  tasks: []

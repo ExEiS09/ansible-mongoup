@@ -1,0 +1,27 @@
+---
+
+- name: Set facts for versioning
+  set_fact:
+    mongo_select_version: " {{ mongo_version[0:3] }} "
+
+- name: Install epel-release
+  package:
+    name: epel-release
+    state: present
+
+- name: Adding a repo
+  template:
+    src: mongodb.repo.j2
+    dest: /etc/yum.repos.d/mongo.repo
+    mode: 0644
+  with_items: " {{ mongo_select_version }} "
+  when: mongodb_package == 'mongodb-org'
+
+- name: Installing a MongoDB package
+    package:
+      name: " {{ mongodb_package }} "
+      state: present
+
+
+  
+  

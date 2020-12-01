@@ -1,0 +1,10 @@
+[mongodb-{{ mongo_selected_version }}]
+name=MongoDB {{ mongo_selected_version }} repository
+baseurl={{ mongo_repository[version_item] }}
+{% if mongo_repository[version_item] is defined and mongo_repository[version_item] != '' %}
+gpgcheck=1
+gpgkey={{ mongo_repository_gpgkey[version_item] }}
+{% else %}
+gpgcheck=0
+{% endif %}
+enabled=1

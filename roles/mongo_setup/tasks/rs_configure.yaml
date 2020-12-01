@@ -1,0 +1,7 @@
+---
+
+- name: Setting the template for setting up the ReplicaSet
+  template:
+    src: rs.initiate.j2
+    dest: /etc/mongo/rs.js
+    mode: 0666

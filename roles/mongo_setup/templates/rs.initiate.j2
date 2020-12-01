@@ -1,0 +1,9 @@
+{% for host in groups['"{{ mongo_project }}"] -%}
+rs.add({
+  host: "{{ host }} ",
+  priority: {{ hostvars[host]['priority'] }}
+  arbiterOnly: {{hostvars[host]['arbiterOnly'] }}
+}}
+{%- endfor %}
+
+printjson(rs.status())

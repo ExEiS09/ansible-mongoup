@@ -1,0 +1,77 @@
+---
+
+- name: Create MongoDB group
+  group:
+    name: " {{ mongo_user }}"
+    state: present
+
+- name: Create MongoDB user
+  user:
+    name: " {{ mongo_user }} "
+    group: " {{ mongo_group }} "
+    state: present
+
+- name: Set correct GID for mongobd group
+  group:
+    name: " {{ mongo_user }} "
+    gid: " {{ mongo_gid }} "
+  when: mongo_gid is defined
+    
+- name: Set correct UID for mongodb user and apply to MongoDB group
+  user:
+    name: " {{ mongo_user }} "
+    uid: " {{ mongo_uid }} "
+    group: " {{ mongo_user }} "
+    state: present
+  when: mongo_uid is defined
+
+- name: Create a key content file for usage in production.
+#### SECURE-WAY: content generated in ansible. Not idempotent, but can help us use this more than one time and without change
+#### the content of file every time
+  command: openssl rand -base64 741
+  register: mongo_key_content
+  when: inventory_hostname == 'master'
+
+- name: Create a key-file if RS is enabled
+  copy:
+    dest: " {{ mongo_key }} "
+    content: " {{ mongo_key_content }} "
+    owner: " {{mongo_user }} "
+    group: root
+    mode: 0600
+  when: mongo_rs_name != ''
+
+- name: Create log directory
+  file:
+    state: directory
+    path: " {{ mongo_systemlog_path|dirname }} "
+    owner: " {{ mongo_user }} "
+    group: " {{ mongo_user }} "
+    mode: 0755
+  when: mongo_systemlog_dest == "file"
+
+- name: Create base directory
+  file:
+    state: directory
+    path: " {{ mongo_base_dir }} "
+    owner: " {{ mongo_user }} "
+    group: " {{ mongo_user }} "
+    mode: 0644
+    recurse: true
+
+- name: Configure mongodb
+  template:
+    src: mongod.conf.j2
+    dest: /etc/mongo/mongod.conf
+    owner: root
+    group: root
+    backup: true
+    mode: 0644
+  notify:
+    - reboot mongo
+    - wait for starting the process
+
+  
+
+  
+  

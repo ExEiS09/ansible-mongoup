@@ -1,0 +1,6 @@
+---
+
+- name: Initialize Replica Set...
+  command: mongo admin -u " {{ mongo_root }} " -p " {{ mongo_root_password }}" --eval "rs.initiate()"
+  
+   

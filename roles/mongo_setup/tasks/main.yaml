@@ -1,0 +1,67 @@
+---
+
+- name: Gathering some facts about machine
+  include_vars: " {{ item }} "
+  with_first_found:
+    - " {{ ansible_distribution_release }}.yml "
+    - " {{ ansible_distribution }}.yml "
+    - " {{ ansible_os_family }}.yml "
+
+- name: Include tasks
+  include: " {{ item }} "
+  with_first_found:
+    - "get.{{ansible_distribution | lower }}.yml "
+    - "get.{{ansible_os_family | lower }}.yml"
+  tags: [mongo]
+
+- name: Configuring systems for usage with MongoDB
+  include: prerequisites.yaml
+  tags: [mongo]
+
+- name: Start the RS initialize if set (only on master node!)
+  include: rs_initiate.yaml
+  when: mongo_rs_name != '' and inventory_hostname == 'master'
+  tags: [mongo]
+
+- name: Start the RS setup on any another nodes
+  include: rs_configure.yaml
+  when: mongo_rs_name != ''
+  tags: [mongo]
+
+- name: Initialize secure cluster if set
+  include: secure.yaml
+  when: mongo_rs_name != '' and mongo_authorization == 'enabled' and inventory_hostname == 'master'
+  tags: [mongo]
+
+- name: Adding base users
+  mongodb_user:
+    database: " {{ item.database }} "
+    name: " {{ item.name }} "
+    password: " {{ item.password }} "
+    update_password: " {{ mongo_update_password }} "
+    roles: " {{ item.roles }} "
+    login_user: " {{ mongo_admin_user }} "
+    login_password: " {{ mongo_admin_password }} "
+    login_port: " {{ mongo_net_port }} "
+    login_host: " {{ mongo_master }} "
+  with_items:
+    - " {{ mongo_users }} "
+
+- name: Create log user
+  mongodb_user:
+    database: admin
+    user: " {{ item.user }} "
+    password: " {{ item.password }} "
+    update_password: " {{ mongo_update_password }} "
+    roles:
+      - db: local
+        role: read
+    login_user: " {{ mongo_admin_user }} "
+    login_password: " {{ mongo_admin_password }} "
+    login_port: " {{ mongo_net_port }} "
+    login_host: " {{ mongo_master }} "
+  with_items:
+    - " {{ mongo_oplog }} "
+  when: ( mongo_rs_name != '' and mongo_authorization == 'enabled' and mongo_master is defined and mongo_master)
+  tags: [mongodb]
+
