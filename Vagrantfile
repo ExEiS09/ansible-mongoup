@@ -25,8 +25,8 @@ Vagrant.configure("2") do |config|
               "mongo" => ["mongo1", "mongo2", "mongo3"]
             }
             ansible.host_vars = {
-              "mongo1" => {"master" => true}
-          }
+              "mongo1" => {"master" => "enabled"}
+            }
          end
         end
       end

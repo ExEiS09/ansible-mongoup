@@ -25,12 +25,20 @@
     state: present
   when: mongo_uid is defined
 
+- name: Create a directory with mongodb configuration files
+  file:
+    state: directory
+    path: "{{ mongo_config_path }}"
+    owner: "{{ mongo_user }}"
+    group: root
+    mode: 0600
+
 - name: Create a key content file for usage in production.
 #### SECURE-WAY: content generated in ansible. Not idempotent, but can help us use this more than one time and without change
 #### the content of file every time
   command: openssl rand -base64 741
   register: mongo_key_content
-  when: inventory_hostname == 'master'
+  when: master == 'enabled'
 
 - name: Create a key-file if RS is enabled
   copy:

@@ -40,6 +40,7 @@ mongo_authorization: "enabled"
 
 mongo_rs_name: "rs01"
 
+mongo_config_path: "/etc/mongo/"
 mongo_key: "/etc/mongo/pem.key"
 
 

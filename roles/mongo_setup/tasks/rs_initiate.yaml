@@ -1,6 +1,7 @@
 ---
 
 - name: Initialize Replica Set...
-  command: mongo admin -u "{{ mongo_root }}" -p "{{ mongo_root_password }}" --eval "rs.initiate()"
+  command: mongo admin -u "{{ mongo_root }}" -p "{{ mongo_root_passwd }}" --eval "rs.initiate()"
+  when: master == 'enabled'
   
    

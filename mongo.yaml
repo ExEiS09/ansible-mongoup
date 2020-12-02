@@ -5,7 +5,6 @@
   become: yes
   vars:
     mongo_version: "4.4"
-    mongo_master: mongo1
     mongo_project: mongo
     mongodb_oplog_users:
       - {

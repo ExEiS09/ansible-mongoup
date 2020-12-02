@@ -24,7 +24,7 @@
 
 - name: Start the RS initialize if set (only on master node!)
   include: rs_initiate.yaml
-  when: mongo_rs_name != '' and inventory_hostname == 'master'
+  when: mongo_rs_name != '' and master == 'enabled'
   tags: [mongo]
 
 - name: Start the RS setup on any another nodes
