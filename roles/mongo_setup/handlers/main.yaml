@@ -7,16 +7,16 @@ name: reboot mongo
   when: mongo_service_manage | bool
 
 name: wait for starting the process
- wait_for:
-   host: " {{ item }}"
-   port: " {{ mongo_net_port }} "
-   timeout: 90
-  with_items:
-    - " {{ mongo_net_bind.split(',') | map ('replace', '0.0.0.0', '127.0.0.1') | list }}"
-
-name: wait for starting process on localhost
   wait_for:
-    host: "127.0.0.1"
+    host: " {{ item }}"
     port: " {{ mongo_net_port }} "
     timeout: 90
-    delay: 10
+   with_items:
+     - " {{ mongo_net_bind.split(',') | map ('replace', '0.0.0.0', '127.0.0.1') | list }}"
+
+name: wait for starting process on localhost
+   wait_for:
+     host: "127.0.0.1"
+     port: " {{ mongo_net_port }} "
+     timeout: 90
+     delay: 10
