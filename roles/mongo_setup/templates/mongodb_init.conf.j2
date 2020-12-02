@@ -1,31 +1,31 @@
 systemLog:
-   verbosity: " {{ mongo_systemlog_verbose }} "
-   destination: " {{ mongo_systemlog_dest }} "
+   verbosity: {{ mongo_systemlog_verbose }}
+   destination: {{ mongo_systemlog_dest }}
    {% if mongo_systemlog_dest == 'file' -%}
-   logAppend: " {{ mongo_systemlog_logappend }} "
-   logRotate: " {{ mongo_systemlog_rotate }} "
-   path: " {{ mongo_systemlog_path }} "
+   logAppend: {{ mongo_systemlog_logappend }}
+   logRotate: {{ mongo_systemlog_rotate }}
+   path: {{ mongo_systemlog_path }}
    {%- endif %} 
    logAppend: true
 
 storage:
-   dbPath: " {{ mongo_base_dir }} "
+   dbPath: {{ mongo_base_dir }}
    journal:
-      enabled: " {{ mongo_base_journal | to_nice_json }} "
+      enabled: {{ mongo_base_journal | to_nice_json }}
 processManagement:
-   fork: " {{ mongo_process_fork | to_nice_json }} "
+   fork: {{ mongo_process_fork | to_nice_json }}
    {% if mongo_process_pid is defined and mongo_process_pid != '' -%}
-   pidFilePath: " {{ mongo_process_pid }} "
+   pidFilePath: "{{ mongo_process_pid }}"
    {%- endif %}
 
 
 net:
    bindIp: '127.0.0.1'
-   port: " {{ mongo_net_port }} "
-   maxIncomingConnections: " {{ mongo_net_maxconn }} "
+   port: {{ mongo_net_port }}
+   maxIncomingConnections: {{ mongo_net_maxconn }}
 
 setParameter:
-   enableLocalhostAuthBypass: " {{ mongo_setparameter_bypass | to_nice_json }} "
+   enableLocalhostAuthBypass: {{ mongo_setparameter_bypass | to_nice_json }}
 
 
 security:

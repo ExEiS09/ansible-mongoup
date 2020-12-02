@@ -1,6 +1,6 @@
-{% for host in groups['"{{ mongo_project }}"] -%}
+{% for host in groups['"{{ mongo }}"] -%}
 rs.add({
-  host: "{{ host }} ",
+  host: "{{ host }}",
   priority: {{ hostvars[host]['priority'] }}
   arbiterOnly: {{hostvars[host]['arbiterOnly'] }}
 }}

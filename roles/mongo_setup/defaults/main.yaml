@@ -5,8 +5,8 @@ mongo_package_installed: present
 mongo_version: "4.4"
 
 
-mongo_user: " {{ 'mongod' if ('RedHat' == ansible_os_family) else 'mongo-user' }} "
-mongo_service_name: " {{ 'mongod' if ('mongodb-org' in mongo_package else 'mongodb' }} "
+mongo_user: "{{ 'mongod' if ('RedHat' == ansible_os_family) else 'mongo-user'}}"
+mongo_service_name: "{{ 'mongod' if ('mongodb-org' in mongo_package else 'mongodb' }}"
 mongo_service_manage: true
 mongo_uid: 3500
 mongo_gid: 3500

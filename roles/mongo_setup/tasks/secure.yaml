@@ -14,45 +14,45 @@
 - name: Create admin user
   mongodb_user:
     database: admin
-    name: " {{ item.name }} "
-    password: " {{ item.password }} "
-    update_password: " {{ mongo_update_password }} "
-    roles: " {{ item.roles }} "
-    login_port: " {{ mongo_net_port }} "
+    name: "{{ item.name }}"
+    password: "{{ item.password }}"
+    update_password: "{{ mongo_update_password }}"
+    roles: "{{ item.roles }}"
+    login_port: "{{ mongo_net_port }}"
   with_items:
     - {
-      name: " {{ mongo_admin }} ",
-      password: " {{ mongo_admin_password }} ",
+      name: "{{ mongo_admin }}",
+      password: "{{ mongo_admin_password }}",
       roles: "userAdminAnyDatabase"
     }
 
 - name: Create root user
   mongodb_user:
     database: admin
-    name: " {{ item.name }} "
-    password: " {{ item.password }} "
-    update_password: " {{ mongo_update_password }} "
-    roles: " {{ item.roles }} "
-    login_port: " {{ mongo_net_port }} "
+    name: "{{ item.name }}"
+    password: "{{ item.password }}"
+    update_password: "{{ mongo_update_password }}"
+    roles: "{{ item.roles }}"
+    login_port: "{{ mongo_net_port }}"
   with_items:
     - {
-      name: " {{ mongo_root }} ",
-      password: " {{ mongo_root_password }} ",
+      name: "{{ mongo_root }}",
+      password: "{{ mongo_root_password }}",
       roles: "root"
     }  
 
 - name: Create backup user
   mongodb_user:
     database: admin
-    name: " {{ item.name }} "
-    password: " {{ item.password }} "
-    update_password: " {{ mongo_update_password }} "
-    roles: " {{ item.roles }} "
-    login_port: " {{ mongo_net_port }} "
+    name: "{{ item.name }}"
+    password: "{{ item.password }}"
+    update_password: "{{ mongo_update_password }}"
+    roles: "{{ item.roles }}"
+    login_port: "{{ mongo_net_port }}"
   with_items:
     - {
-      name: " {{ mongo_backup }} ",
-      password: " {{ mongo_backup_password }} ",
+      name: "{{ mongo_backup }}",
+      password: "{{ mongo_backup_password }}",
       roles: "backup,clusterMonitor"
     }  
 

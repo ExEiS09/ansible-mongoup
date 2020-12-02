@@ -1,18 +1,22 @@
 ---
 
-- name: Gathering some facts about machine
-  include_vars: " {{ item }} "
-  with_first_found:
-    - " {{ ansible_distribution_release }}.yml "
-    - " {{ ansible_distribution }}.yml "
-    - " {{ ansible_os_family }}.yml "
+- name: Display all facts about machine
+  debug:
+    var: ansible_facts
+
+#- name: Gathering some facts about machine
+#  include_vars: " {{ item }} "
+#  with_first_found:
+#    - " {{ ansible_distribution_release }}.yaml "
+#    - " {{ ansible_distribution }}.yaml "
+#    - " {{ ansible_os_family }}.yaml "
 
 - name: Include tasks
-  include: " {{ item }} "
-  with_first_found:
-    - "get.{{ansible_distribution | lower }}.yml "
-    - "get.{{ansible_os_family | lower }}.yml"
-  tags: [mongo]
+  include: get.centos.yaml
+#  with_first_found:
+#    - "get.{{ ansible_distribution | lower }}.yaml "
+#    - "get.{{ ansible_os_family | lower }}.yaml"
+#  tags: [mongo]
 
 - name: Configuring systems for usage with MongoDB
   include: prerequisites.yaml
@@ -35,33 +39,33 @@
 
 - name: Adding base users
   mongodb_user:
-    database: " {{ item.database }} "
-    name: " {{ item.name }} "
-    password: " {{ item.password }} "
-    update_password: " {{ mongo_update_password }} "
-    roles: " {{ item.roles }} "
-    login_user: " {{ mongo_admin_user }} "
-    login_password: " {{ mongo_admin_password }} "
-    login_port: " {{ mongo_net_port }} "
-    login_host: " {{ mongo_master }} "
+    database: "{{ item.database }}"
+    name: "{{ item.name }}"
+    password: "{{ item.password }}"
+    update_password: "{{ mongo_update_password }}"
+    roles: "{{ item.roles }}"
+    login_user: "{{ mongo_admin_user }}"
+    login_password: "{{ mongo_admin_password }}"
+    login_port: "{{ mongo_net_port }}"
+    login_host: "{{ mongo_master }}"
   with_items:
-    - " {{ mongo_users }} "
+    - "{{ mongo_users }}"
 
 - name: Create log user
   mongodb_user:
     database: admin
-    user: " {{ item.user }} "
-    password: " {{ item.password }} "
-    update_password: " {{ mongo_update_password }} "
+    user: "{{ item.user }}"
+    password: "{{ item.password }}"
+    update_password: "{{ mongo_update_password }}"
     roles:
       - db: local
         role: read
-    login_user: " {{ mongo_admin_user }} "
-    login_password: " {{ mongo_admin_password }} "
-    login_port: " {{ mongo_net_port }} "
-    login_host: " {{ mongo_master }} "
+    login_user: "{{ mongo_admin_user }}"
+    login_password: "{{ mongo_admin_password }}"
+    login_port: "{{ mongo_net_port }}"
+    login_host: "{{ mongo_master }}"
   with_items:
-    - " {{ mongo_oplog }} "
+    - "{{ mongo_oplog }}"
   when: ( mongo_rs_name != '' and mongo_authorization == 'enabled' and mongo_master is defined and mongo_master)
   tags: [mongodb]
 

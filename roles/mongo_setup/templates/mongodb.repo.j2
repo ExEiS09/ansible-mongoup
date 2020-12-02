@@ -1,5 +1,5 @@
-[mongodb-{{ mongo_selected_version }}]
-name=MongoDB {{ mongo_selected_version }} repository
+[mongodb-{{ mongo_select_version }}]
+name=MongoDB {{ mongo_select_version }} repository
 baseurl={{ mongo_repository[version_item] }}
 {% if mongo_repository[version_item] is defined and mongo_repository[version_item] != '' %}
 gpgcheck=1
