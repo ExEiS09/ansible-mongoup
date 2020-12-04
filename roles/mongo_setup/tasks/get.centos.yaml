@@ -20,7 +20,7 @@
   when: mongo_package == 'mongodb-org'
 
 - name: Installing a MongoDB package
-  package:
+  yum:
     name: "{{ mongo_package }}"
     state: present
 

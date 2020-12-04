@@ -3,7 +3,7 @@
 - name: Clone non-auth config for start the cluster
   template:
     src: mongodb_init.conf.j2
-    dest: /etc/mongo/mongod.conf
+    dest: /etc/mongod.conf
     owner: root
     group: root
     mode: 0644
@@ -59,7 +59,7 @@
 - name: Move back original config of mongod
   template:
     src: mongod.conf.j2
-    dest: /etc/mongo/mongod.conf
+    dest: /etc/mongod.conf
     owner: root
     group: root
     mode: 0644

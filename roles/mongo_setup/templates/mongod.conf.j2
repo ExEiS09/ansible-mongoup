@@ -6,7 +6,6 @@ systemLog:
    logRotate: {{ mongo_systemlog_rotate }}
    path: {{ mongo_systemlog_path }}
    {%- endif %} 
-   logAppend: true
 
 storage:
    dbPath: {{ mongo_base_dir }}

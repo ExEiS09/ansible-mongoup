@@ -43,8 +43,8 @@
 - name: Create a key-file if RS is enabled
   copy:
     dest: "{{ mongo_key }}"
-    content: "{{ mongo_key_content }}"
-    owner: "{{mongo_user }}"
+    content: "{{ mongo_key_content.stdout }}"
+    owner: "{{ mongo_user }}"
     group: root
     mode: 0600
   when: mongo_rs_name != ''
@@ -70,7 +70,7 @@
 - name: Configure mongodb
   template:
     src: mongod.conf.j2
-    dest: /etc/mongo/mongod.conf
+    dest: /etc/mongod.conf
     owner: root
     group: root
     backup: true
