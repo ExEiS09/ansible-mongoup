@@ -12,4 +12,5 @@ mongo_repository_gpgkey:
   "4.2": "https://www.mongodb.org/static/pgp/server-4.2.asc"
   "4.4": "https://www.mongodb.org/static/pgp/server-4.4.asc"
 
-mongo_process_pid: "{{ '/var/run/mongodb/mongo.pid' if ('mongodb-org' in mongo_package) else ''}} "
+mongo_process_pid: /mongo/mongo.pid
+mongo_setype: mongod_var_lib_t

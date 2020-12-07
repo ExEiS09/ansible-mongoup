@@ -2,11 +2,11 @@
 
 mongo_package: mongodb-org
 mongo_package_installed: present
-mongo_version: "4.4"
+mongo_version: "4.2"
 
 
 mongo_user: "{{ 'mongod' if ('RedHat' == ansible_os_family) else 'mongo-user'}}"
-mongo_service_name: "{{ 'mongod' if ('mongodb-org' in mongo_package else 'mongodb' }}"
+mongo_service_name: "{{ 'mongod' if ('mongodb-org' in mongo_package) else 'mongodb' }}"
 mongo_service_manage: true
 mongo_uid: 3500
 mongo_gid: 3500
@@ -40,8 +40,8 @@ mongo_authorization: "enabled"
 
 mongo_rs_name: "rs01"
 
-mongo_config_path: "/etc/mongo/"
-mongo_key: "/etc/mongo/pem.key"
+mongo_config_path: "/media/data/mongodb/"
+mongo_key: "/media/data/mongodb/pem.key"
 
 
 #### NEED TO SETUP GROUP AND MASTER NODE IN YAML WHEN PLAY THE BOOK

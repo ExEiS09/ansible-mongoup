@@ -30,8 +30,13 @@
     state: directory
     path: "{{ mongo_config_path }}"
     owner: "{{ mongo_user }}"
-    group: root
-    mode: 0600
+    group: "{{ mongo_user }}"
+    setype: "{{ mongo_setype }}"
+    mode: 0755
+  register: result_papka
+
+- debug:
+    msg: "{{ result_papka }}"
 
 - name: Create a key content file for usage in production.
 #### SECURE-WAY: content generated in ansible. Not idempotent, but can help us use this more than one time and without change
@@ -45,9 +50,18 @@
     dest: "{{ mongo_key }}"
     content: "{{ mongo_key_content.stdout }}"
     owner: "{{ mongo_user }}"
-    group: root
+    group: "{{ mongo_user }}"
     mode: 0600
   when: mongo_rs_name != ''
+
+- name: Create base directory
+  file:
+    state: directory
+    path: "{{ mongo_base_dir }}"
+    owner: "{{ mongo_user }}"
+    group: "{{ mongo_user }}"
+    mode: 0755
+    recurse: true
 
 - name: Create log directory
   file:
@@ -58,14 +72,28 @@
     mode: 0755
   when: mongo_systemlog_dest == "file"
 
-- name: Create base directory
-  file:
-    state: directory
-    path: "{{ mongo_base_dir }}"
-    owner: "{{ mongo_user }}"
-    group: "{{ mongo_user }}"
-    mode: 0644
-    recurse: true
+- name: Create a PID dir and PID file
+  include: pid.yaml
+  when: ansible_os_family == "RedHat"
+
+#- name: Set the correct SELinux Context
+#  sefcontext:
+#    target: '"{{ mongo_base_dir }}"'
+#    setype: "{{ mongo_setype }}"
+##    state: present
+#  register: result_papka
+#  when: ansible_os_family == "RedHat"
+
+#- debug:
+#    msg: "{{ result_papka }}"
+
+#- name: Apply the correct SELinux Context
+#  command: restorecon -irv "{{ mongo_config_path }}"
+#  register: result_papka
+#  when: ansible_os_family == "RedHat"
+
+#- debug:
+#    msg: "{{ result_papka }}"
 
 - name: Configure mongodb
   template:
@@ -75,9 +103,11 @@
     group: root
     backup: true
     mode: 0644
-  notify:
-    - reboot mongo
-    - wait for starting the process
+
+- name: start mongodb
+  service:
+    name: "{{ mongo_service_name }}"
+    state: started
 
   
 

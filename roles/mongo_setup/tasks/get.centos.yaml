@@ -20,10 +20,18 @@
   when: mongo_package == 'mongodb-org'
 
 - name: Installing a MongoDB package
-  yum:
+  package:
     name: "{{ mongo_package }}"
     state: present
 
+#- name: Installing policycoreutils
+#  package:
+#    name: "{{ item }}"
+#    state: present
+#  with_items:
+#    - policycoreutils
+#    - policycoreutils-python
 
-  
-  
+- name: disable SElinux
+  selinux:
+    state: disabled

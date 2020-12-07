@@ -2,7 +2,7 @@ systemLog:
    verbosity: {{ mongo_systemlog_verbose }}
    destination: {{ mongo_systemlog_dest }}
    {% if mongo_systemlog_dest == 'file' -%}
-   logAppend: {{ mongo_systemlog_logappend }}
+   logAppend: {{ mongo_systemlog_logappend | lower }}
    logRotate: {{ mongo_systemlog_rotate }}
    path: {{ mongo_systemlog_path }}
    {%- endif %} 
